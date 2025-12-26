@@ -37,9 +37,9 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         request.setUsername("Duplicate User");
         
         mockMvc.perform(post("/api/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(request)))
-                .andExpect(status().is5xxServerError()); // Should return error
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isConflict());
     }
     
     @Test
@@ -112,8 +112,8 @@ public class AuthControllerIntegrationTest extends BaseIntegrationTest {
         request.setPassword("newpassword");
         
         mockMvc.perform(post("/api/auth/reset-password")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(request)))
-                .andExpect(status().is5xxServerError());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isNotFound());
     }
 }
